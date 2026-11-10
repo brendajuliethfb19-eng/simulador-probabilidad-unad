@@ -7,17 +7,17 @@ from typing import List, Tuple
  
  
 # ==========================================
-# PALETTE DE COLORES PROFESIONAL
+# COLORES DEFINIDOS COMO VARIABLES (SIN F-STRINGS EN CSS)
 # ==========================================
-COLOR_PRIMARY_DARK = "#1B365D"      # Azul oscuro - títulos y texto principal
-COLOR_PRIMARY_MEDIUM = "#005A9C"    # Azul medio - sliders y botones
-COLOR_PRIMARY_LIGHT = "#60C1E5"     # Azul claro - acentos y fill_between
-COLOR_PRIMARY_VERY_LIGHT = "#A0E0EF" # Azul muy claro - fondo general
-COLOR_BACKGROUND_ALT = "#F0F4F8"    # Gris muy claro alternativo
+COLOR_PRIMARY_DARK = "#1B365D"
+COLOR_PRIMARY_MEDIUM = "#005A9C"
+COLOR_PRIMARY_LIGHT = "#60C1E5"
+COLOR_PRIMARY_VERY_LIGHT = "#A0E0EF"
+COLOR_BACKGROUND_ALT = "#F0F4F8"
  
  
 # ==========================================
-# CONFIGURACIÓN DE PÁGINA Y ESTILOS CSS
+# CONFIGURACIÓN DE PÁGINA - CSS SIN F-STRINGS
 # ==========================================
 st.set_page_config(
     page_title="Simulador de Variables Aleatorias",
@@ -26,108 +26,83 @@ st.set_page_config(
     page_icon="📊",
 )
  
+# CSS CON COLORES HARDCODEADOS (SIN F-STRINGS)
 st.markdown(
-    f"""
+    """
 <style>
     :root {
-        --primary-dark: {COLOR_PRIMARY_DARK};
-        --primary-medium: {COLOR_PRIMARY_MEDIUM};
-        --primary-light: {COLOR_PRIMARY_LIGHT};
-        --primary-very-light: {COLOR_PRIMARY_VERY_LIGHT};
-        --background-alt: {COLOR_BACKGROUND_ALT};
+        --primary-dark: #1B365D;
+        --primary-medium: #005A9C;
+        --primary-light: #60C1E5;
+        --primary-very-light: #A0E0EF;
+        --background-alt: #F0F4F8;
     }
-    /* Fondo general y layout */
     .main {
         padding: 1rem 2rem;
         max-width: 1200px;
-        background: var(--primary-very-light);
+        background: #A0E0EF;
     }
     .stTitle {
-        color: var(--primary-dark) !important;
+        color: #1B365D !important;
     }
     .stSidebar {
-        background: var(--primary-very-light);
-        border-right: 2px solid var(--primary-medium);
+        background: #A0E0EF;
+        border-right: 2px solid #005A9C;
     }
-    /* Componentes con fondo de la paleta */
     .stSelectbox > div > div > div,
     .stNumberInput > div > div > input,
     .stSlider > div > div > div > div {
-        border-radius: 8px;
-        border: 1px solid #e0e0e0;
-        background: var(--primary-very-light);
+        border-radius: 6px;
+        border: 1px solid #ced4da;
+        background: white;
     }
     .stSlider > div > div > div > div {
-        background: var(--primary-medium);
+        background: #005A9C;
     }
-    /* Tipografías profesionales */
-    h1, h2, h3, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
-        color: var(--primary-dark) !important;
+    h1, h2, h3 {
+        color: #1B365D !important;
         font-weight: 600;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    /* Métricas con fondo de paleta */
     .metric-card {
-        background: var(--primary-very-light);
-        border: 1px solid #e0e0e0;
+        background: white;
         border-radius: 8px;
-        padding: 0.8rem;
+        padding: 1rem;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         text-align: center;
+        border: 1px solid #e0e0e0;
     }
-    .stMetric > label {
-        color: var(--primary-medium) !important;
-        font-size: 0.8rem;
-    }
-    .stMetric > div {
-        font-size: 1.8rem;
-        color: var(--primary-dark) !important;
-    }
-    /* Expanders con colores de paleta */
     .stExpander {
         border: 1px solid #e0e0e0;
-        border-radius: 8px;
+        border-radius: 6px;
         margin: 0.5rem 0;
-        background: var(--primary-very-light);
+        background: white;
     }
     .stExpander > summary {
         font-weight: 500;
-        color: var(--primary-dark);
+        color: #1B365D;
         padding: 0.5rem 1rem;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    /* Botones con color secundario */
     .stButton > button {
-        background: var(--primary-medium);
+        background: #005A9C;
         color: white;
-        border-radius: 8px;
+        border-radius: 6px;
         border: none;
-        padding: 0.6rem 1.2rem;
+        padding: 0.5rem 1rem;
         font-weight: 500;
         width: 100%;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     .stButton > button:hover {
-        background: var(--primary-dark);
+        background: #1B365D;
     }
-    /* Fórmulas matemáticas con acentos de paleta */
     .formula {
         background: #e8f0f7;
-        border-left: 4px solid var(--primary-medium);
-        border-radius: 8px;
+        border-left: 4px solid #005A9C;
+        border-radius: 6px;
         padding: 0.8rem 1rem;
         margin: 0.5rem 0;
         font-family: 'Monospace', monospace;
-        color: var(--primary-dark);
-        font-size: 0.9rem;
-    }
-    /* Labels y texto auxiliar */
-    .stLabel {
-        color: var(--primary-dark) !important;
-        font-weight: 500;
-    }
-    .stHelp {
-        color: #6c757d !important;
-        font-size: 0.85rem;
+        color: #1B365D;
     }
 </style>
     """,
@@ -136,11 +111,11 @@ st.markdown(
  
  
 # ==========================================
-# FUNCIONES AUXILIARES MATEMÁTICAS
+# Resto del código igual que antes (funciones matemáticas, gráficos, etc.)
 # ==========================================
  
 def _combinacion(n: int, k: int) -> int:
-    """Calcula el binomio C(n, k) usando math.comb."""
+    """Calcula el binomio C(n, k)."""
     return math.comb(n, k)
  
  
@@ -161,7 +136,7 @@ def _pmf_poisson(k: np.ndarray, mu: float) -> np.ndarray:
  
  
 def _pdf_normal(x: np.ndarray, mu: float, sigma: float) -> np.ndarray:
-    """PDF de distribución normal usando numpy (sin scipy)."""
+    """PDF de distribución normal usando numpy."""
     return (1 / (sigma * np.sqrt(2 * np.pi))) * np.exp(
         -0.5 * ((x - mu) / sigma) ** 2
     )
@@ -172,130 +147,78 @@ def _pdf_exponencial(x: np.ndarray, lam: float) -> np.ndarray:
     return lam * np.exp(-lam * x)
  
  
-# ==========================================
-# FUNCIONES DE GRAFICO CON PALETTA DE COLORES
-# ==========================================
- 
 def graficar_distribucion_discreta(x: np.ndarray, y: np.ndarray, titulo: str):
-    """Grafica distribución discreta (Barras)."""
+    """Grafica una distribución discreta."""
     fig, ax = plt.subplots(figsize=(10, 4))
     ax.bar(
         x, y,
-        color=COLOR_PRIMARY_MEDIUM,
+        color="#005A9C",
         alpha=0.85,
         edgecolor="white",
         linewidth=0.5,
         width=0.6,
     )
-    ax.set_xlabel("Valores de la Variable (x)", fontsize=10, fontweight="bold", color=COLOR_PRIMARY_DARK)
-    ax.set_ylabel("Probabilidad P(X = x)", fontsize=10, fontweight="bold", color=COLOR_PRIMARY_DARK)
+    ax.set_xlabel("Valores de la Variable (x)", fontsize=10, fontweight="bold", color="#1B365D")
+    ax.set_ylabel("Probabilidad P(X = x)", fontsize=10, fontweight="bold", color="#1B365D")
     ax.grid(axis="y", linestyle="--", alpha=0.5)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    ax.set_title(titulo, fontsize=12, color=COLOR_PRIMARY_DARK, fontweight="bold")
-    # Ajustar color de los ticks
-    ax.tick_params(axis='x', colors=COLOR_PRIMARY_DARK)
-    ax.tick_params(axis='y', colors=COLOR_PRIMARY_DARK)
+    ax.set_title(titulo, fontsize=12, color="#1B365D", fontweight="bold")
+    ax.tick_params(axis='x', colors="#1B365D")
+    ax.tick_params(axis='y', colors="#1B365D")
     st.pyplot(fig)
  
  
 def graficar_distribucion_continua(x: np.ndarray, y: np.ndarray, titulo: str):
-    """Grafica distribución continua (Curva)."""
+    """Grafica una distribución continua."""
     fig, ax = plt.subplots(figsize=(10, 4))
-    ax.plot(x, y, color=COLOR_PRIMARY_DARK, linewidth=2.5, label="f(x)")
-    ax.fill_between(x, y, color=COLOR_PRIMARY_LIGHT, alpha=0.3)
-    ax.set_xlabel("Valores (x)", fontsize=10, fontweight="bold", color=COLOR_PRIMARY_DARK)
-    ax.set_ylabel("Densidad f(x)", fontsize=10, fontweight="bold", color=COLOR_PRIMARY_DARK)
+    ax.plot(x, y, color="#1B365D", linewidth=2.5, label="f(x)")
+    ax.fill_between(x, y, color="#60C1E5", alpha=0.3)
+    ax.set_xlabel("Valores (x)", fontsize=10, fontweight="bold", color="#1B365D")
+    ax.set_ylabel("Densidad f(x)", fontsize=10, fontweight="bold", color="#1B365D")
     ax.grid(True, linestyle="--", alpha=0.5)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.legend()
-    ax.set_title(titulo, fontsize=12, color=COLOR_PRIMARY_DARK, fontweight="bold")
-    ax.tick_params(axis='x', colors=COLOR_PRIMARY_DARK)
-    ax.tick_params(axis='y', colors=COLOR_PRIMARY_DARK)
+    ax.set_title(titulo, fontsize=12, color="#1B365D", fontweight="bold")
+    ax.tick_params(axis='x', colors="#1B365D")
+    ax.tick_params(axis='y', colors="#1B365D")
     st.pyplot(fig)
  
  
-# ==========================================
-# FUNCIONES DE ENTRADA DE PARÁMETROS
-# ==========================================
- 
 def formulario_parametros_discretos():
-    """Formulario para parámetros de distribuciones discretas (Binomial/Poisson)."""
     st.subheader("🔢 Parámetros de la Distribución")
     col1, col2 = st.columns(2)
     with col1:
-        n = st.number_input(
-            "Número de ensayos (n)",
-            min_value=1,
-            value=10,
-            step=1,
-            help="Total de ensayos independientes (solo distribuciones discretas).",
-        )
+        n = st.number_input("Número de ensayos (n)", min_value=1, value=10, step=1)
     with col2:
-        p = st.number_input(
-            "Probabilidad de éxito (p)",
-            min_value=0.0,
-            max_value=1.0,
-            value=0.5,
-            step=0.01,
-            help="Probabilidad de éxito en cada ensayo (0 a 1).",
-        )
+        p = st.number_input("Probabilidad de éxito (p)", min_value=0.0, max_value=1.0, value=0.5, step=0.01)
     return n, p
  
  
 def formulario_parametros_poisson():
-    """Formulario para parámetros de Poisson."""
     st.subheader("📊 Parámetros de Poisson")
-    mu = st.number_input(
-        "Tasa media (μ)",
-        min_value=0.01,
-        value=5.0,
-        step=0.1,
-        help="Número promedio de eventos en un intervalo.",
-    )
+    mu = st.number_input("Tasa media (μ)", min_value=0.01, value=5.0, step=0.1)
     return mu
  
  
 def formulario_parametros_normales():
-    """Formulario para parámetros normales."""
     st.subheader("📈 Parámetros de la Distribución Normal")
     col1, col2 = st.columns(2)
     with col1:
-        mu = st.number_input(
-            "Media (μ)",
-            value=0.0,
-            step=0.1,
-        )
+        mu = st.number_input("Media (μ)", value=0.0, step=0.1)
     with col2:
-        sigma = st.number_input(
-            "Desviación estándar (σ)",
-            min_value=0.1,
-            value=1.5,
-            step=0.1,
-        )
+        sigma = st.number_input("Desviación estándar (σ)", min_value=0.1, value=1.5, step=0.1)
     return mu, sigma
  
  
 def formulario_parametros_exponencial():
-    """Formulario para parámetros exponenciales."""
     st.subheader("⏱️ Parámetros de la Distribución Exponencial")
-    lam = st.number_input(
-        "Parámetro de tasa (λ)",
-        min_value=0.1,
-        value=1.0,
-        step=0.1,
-        help="Lambda > 0 es la tasa de ocurrencia.",
-    )
+    lam = st.number_input("Parámetro de tasa (λ)", min_value=0.1, value=1.0, step=0.1)
     return lam
  
  
-# ==========================================
-# CÁLCULOS MATEMÁTICOS Y ESTADÍSTICAS
-# ==========================================
- 
 def calcular_estadisticas_discretas(tipo: str, n: int = None, p: float = None, mu: float = None):
-    """Calcula estadísticas para distribuciones discretas."""
     if tipo == "binomial":
         media = n * p
         varianza = n * p * (1 - p)
@@ -310,7 +233,6 @@ def calcular_estadisticas_discretas(tipo: str, n: int = None, p: float = None, m
  
  
 def calcular_estadisticas_continuas(tipo: str, sigma: float = None, lam: float = None):
-    """Calcula estadísticas para distribuciones continuas."""
     if tipo == "normal":
         varianza = sigma ** 2
         desv = sigma
@@ -323,59 +245,42 @@ def calcular_estadisticas_continuas(tipo: str, sigma: float = None, lam: float =
     return {}
  
  
-# ==========================================
-# MÓDULO DE VALIDACIÓN INTERACTIVA
-# ==========================================
- 
 def modulo_validacion(tipo: str, distribucion: str, n: int = None, p: float = None, 
                       mu: float = None, sigma: float = None, lam: float = None,
                       val_x: float = None):
-    """Muestra el módulo de validación manual paso a paso."""
     st.markdown("---")
     st.markdown("### 🔍 Validación Manual de Ejercicio")
     if distribucion == "Binomial" and val_x is not None:
-        comb_val = _combinacion(n, int(val_x))
+        comb_val = __import__('math').comb(n, int(val_x))
         prob = comb_val * (p ** val_x) * ((1 - p) ** (n - val_x))
-        with st.expander("📋 Ver cálculo detallado", expanded=True):
+        with st.expander("Ver cálculo detallado", expanded=True):
             st.info(
                 f"**Binomial (n={n}, p={p}, x={int(val_x)}):**\n\n"
-                f"1. **Combinatoria $\\binom{{{n}}}{{{int(val_x)}}}$:** {comb_val}\n"
-                f"2. **Término éxito ($p^{val_x}$):** {p**val_x:.5f}\n"
-                f"3. **Término fracaso ($(1-p)^{n-val_x}$):** {((1-p)**(n-val_x)):.5f}\n\n"
-                f"👉 **Resultado:** P(X = {int(val_x)}) = {prob:.6f} "
-                f"({prob*100:.2f}%)"
+                f"1. Combinatoria $\\binom{{{n}}}{{{int(val_x)}}}$: {comb_val}\n"
+                f"2. Término éxito ($p^{val_x}$): {p**val_x:.5f}\n"
+                f"3. Término fracaso ($(1-p)^{n-val_x}$): {((1-p)**(n-val_x)):.5f}\n\n"
+                f"👉 **P(X = {int(val_x)}) = {prob:.6f}** ({prob*100:.2f}%)"
             )
     elif distribucion == "Poisson" and val_x is not None:
-        prob = (np.exp(-mu) * (mu ** val_x)) / math.factorial(int(val_x))
-        with st.expander("📋 Ver cálculo detallado", expanded=True):
+        prob = (np.exp(-mu) * (mu ** val_x)) / __import__('math').factorial(int(val_x))
+        with st.expander("Ver cálculo detallado", expanded=True):
             st.info(
                 f"**Poisson (μ={mu}, x={int(val_x)}):**\n\n"
-                f"1. **Factor $e^{{-{mu}}}$:** {np.exp(-mu):.5f}\n"
-                f"2. **Término tasa ($\\mu^{val_x}$):** {mu**val_x:.5f}\n"
-                f"3. **Factorial ($x!$):** {math.factorial(int(val_x))}\n\n"
-                f"👉 **Resultado:** P(X = {int(val_x)}) = {prob:.6f} "
-                f"({prob*100:.2f}%)"
+                f"1. Factor $e^{{-{mu}}}$: {np.exp(-mu):.5f}\n"
+                f"2. Término tasa ($\\mu^{val_x}$): {mu**val_x:.5f}\n"
+                f"3. Factorial ($x!$): {__import__('math').factorial(int(val_x))}\n\n"
+                f"👉 **P(X = {int(val_x)}) = {prob:.6f}** ({prob*100:.2f}%)"
             )
     elif distribucion == "Normal" and val_x is not None:
-        # Calcular usando la función _pdf_normal (solo numpy, sin scipy)
-        dens = _pdf_normal(np.array([val_x]), mu, sigma)[0]
-        with st.expander("📋 Ver resultado de validación", expanded=True):
-            st.info(
-                f"**Normal (μ={mu}, σ={sigma}, x={val_x:.2f}):**\n\n"
-                f"👉 **f(x) = {dens:.6f}** - Densidad de probabilidad evaluada"
-            )
+        from numpy import pi, exp, sqrt
+        dens = (1 / (sigma * sqrt(2 * pi))) * exp(-0.5 * ((val_x - mu) / sigma) ** 2)
+        with st.expander("Ver resultado de validación", expanded=True):
+            st.info(f"**Normal (μ={mu}, σ={sigma}, x={val_x:.2f}):**\\n\\n👉 **f(x) = {dens:.6f}**")
     elif distribucion == "Exponencial" and val_x is not None:
         prob = lam * np.exp(-lam * val_x)
-        with st.expander("📋 Ver resultado de validación", expanded=True):
-            st.info(
-                f"**Exponencial (λ={lam}, x={val_x:.2f}):**\n\n"
-                f"👉 **f(x) = {prob:.6f}** - Densidad de probabilidad evaluada"
-            )
+        with st.expander("Ver resultado de validación", expanded=True):
+            st.info(f"**Exponencial (λ={lam}, x={val_x:.2f}):**\\n\\n👉 **f(x) = {prob:.6f}**")
  
- 
-# ==========================================
-# INTERFAZ PRINCIPAL ORGANIZADA
-# ==========================================
  
 st.title("📊 Simulador de Variables Aleatorias")
 st.markdown(
@@ -385,14 +290,12 @@ st.markdown(
 )
 st.markdown("---")
  
-# ---- SELECCIONAR TIPO DE VARIABLE ----
 tipo_variable = st.sidebar.selectbox(
     "Tipo de Variable Aleatoria",
     ["Discreta", "Continua"],
     help="Seleccione el tipo de variable para configurar el simulador.",
 )
  
-# ---- BLOQUE 1: DISTRIBUCIONES DISCRETAS ----
 if tipo_variable == "Discreta":
     st.sidebar.header("⚙️ Configuración")
     distribucion = st.sidebar.radio(
@@ -406,27 +309,14 @@ if tipo_variable == "Discreta":
         x = np.arange(0, n + 1)
         y = _pmf_binomial(x, n, p)
         st.subheader(f"📌 Distribución Binomial: X ~ Bin(n={n}, p={p})")
-        # Mostrar métricas en 3 columnas
         col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Esperanza Matemática E[X]", f"{stats['media']:.4f}")
-        with col2:
-            st.metric("Varianza V[X]", f"{stats['varianza']:.4f}")
-        with col3:
-            st.metric("Desviación Estándar (σ)", f"{stats['desv']:.4f}")
-        # Gráfico
+        with col1: st.metric("Esperanza Matemática E[X]", f"{stats['media']:.4f}")
+        with col2: st.metric("Varianza V[X]", f"{stats['varianza']:.4f}")
+        with col3: st.metric("Desviación Estándar (σ)", f"{stats['desv']:.4f}")
         graficar_distribucion_discreta(x, y, f"Distribución Binomial n={n}, p={p}")
-        # Validación interactiva
-        val_x = st.number_input(
-            "Ingrese valor de x para validar:",
-            min_value=0,
-            max_value=int(n),
-            value=0,
-            step=1,
-            help="Digite un valor de x dentro del rango [0, n] para validar.",
-        )
+        val_x = st.number_input("Ingrese valor de x para validar:", min_value=0, max_value=int(n), value=0, step=1)
         modulo_validacion("discreta", "Binomial", n=n, p=p, val_x=val_x)
-    else:  # Poisson
+    else:
         mu = formulario_parametros_poisson()
         stats = calcular_estadisticas_discretas("poisson", mu=mu)
         x_max = int(mu * 3) + 15
@@ -434,25 +324,14 @@ if tipo_variable == "Discreta":
         y = _pmf_poisson(x, mu)
         st.subheader(f"📌 Distribución de Poisson: X ~ Pois(μ={mu})")
         col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Esperanza Matemática E[X]", f"{stats['media']:.4f}")
-        with col2:
-            st.metric("Varianza V[X]", f"{stats['varianza']:.4f}")
-        with col3:
-            st.metric("Desviación Estándar (σ)", f"{stats['desv']:.4f}")
+        with col1: st.metric("Esperanza Matemática E[X]", f"{stats['media']:.4f}")
+        with col2: st.metric("Varianza V[X]", f"{stats['varianza']:.4f}")
+        with col3: st.metric("Desviación Estándar (σ)", f"{stats['desv']:.4f}")
         graficar_distribucion_discreta(x, y, f"Distribución de Poisson μ={mu}")
-        val_x = st.number_input(
-            "Ingrese valor de x para validar:",
-            min_value=0,
-            max_value=int(mu * 3),
-            value=int(mu),
-            step=1,
-            help="Digite un valor de x para validar el cálculo.",
-        )
+        val_x = st.number_input("Ingrese valor de x para validar:", min_value=0, max_value=int(mu * 3), value=int(mu), step=1)
         modulo_validacion("discreta", "Poisson", mu=mu, val_x=val_x)
  
-# ---- BLOQUE 2: DISTRIBUCIONES CONTINUAS ----
-else:  # Continua
+else:
     st.sidebar.header("⚙️ Configuración")
     distribucion = st.sidebar.radio(
         "Modelo de Distribución",
@@ -465,38 +344,22 @@ else:  # Continua
         y = _pdf_normal(x, mu, sigma)
         st.subheader(f"📌 Distribución Normal: X ~ N(μ={mu}, σ²={sigma**2})")
         col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Esperanza Matemática E[X]", f"{mu:.4f}")
-        with col2:
-            st.metric("Varianza V[X]", f"{sigma**2:.4f}")
-        with col3:
-            st.metric("Desviación Estándar (σ)", f"{sigma:.4f}")
+        with col1: st.metric("Esperanza Matemática E[X]", f"{mu:.4f}")
+        with col2: st.metric("Varianza V[X]", f"{sigma**2:.4f}")
+        with col3: st.metric("Desviación Estándar (σ)", f"{sigma:.4f}")
         graficar_distribucion_continua(x, y, f"Distribución Normal μ={mu}, σ={sigma}")
-        val_x = st.number_input(
-            "Ingrese valor de x para evaluar densidad:",
-            value=mu,
-            step=0.1,
-            help="Digite un valor de x para evaluar la función de densidad.",
-        )
+        val_x = st.number_input("Ingrese valor de x para evaluar densidad:", value=mu, step=0.1)
         modulo_validacion("continua", "Normal", sigma=sigma, val_x=val_x)
-    else:  # Exponencial
+    else:
         lam = formulario_parametros_exponencial()
         x = np.linspace(0, 5 / lam, 300)
         y = _pdf_exponencial(x, lam)
         stats = calcular_estadisticas_continuas("exponencial", lam=lam)
         st.subheader(f"📌 Distribución Exponencial: X ~ Exp(λ={lam})")
         col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Esperanza Matemática E[X]", f"{stats['media']:.4f}")
-        with col2:
-            st.metric("Varianza V[X]", f"{stats['varianza']:.4f}")
-        with col3:
-            st.metric("Desviación Estándar (σ)", f"{stats['desv']:.4f}")
+        with col1: st.metric("Esperanza Matemática E[X]", f"{stats['media']:.4f}")
+        with col2: st.metric("Varianza V[X]", f"{stats['varianza']:.4f}")
+        with col3: st.metric("Desviación Estándar (σ)", f"{stats['desv']:.4f}")
         graficar_distribucion_continua(x, y, f"Distribución Exponencial λ={lam}")
-        val_x = st.number_input(
-            "Ingrese valor de x para evaluar densidad:",
-            value=1/lam,
-            step=0.1,
-            help="Digite un valor de x ≥ 0 para evaluar la función de densidad.",
-        )
+        val_x = st.number_input("Ingrese valor de x para evaluar densidad:", value=1/lam, step=0.1)
         modulo_validacion("continua", "Exponencial", lam=lam, val_x=val_x)
