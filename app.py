@@ -4,41 +4,44 @@ import numpy as np
 import streamlit as st
 
 # ==========================================
-# CONFIGURACIÓN DE PÁGINA Y COLORES OFICIALES UNAD
+# CONFIGURACIÓN DE PÁGINA Y ESTILO INSTITUCIONAL UNAD
 # ==========================================
 st.set_page_config(
-    page_title="Simulador de Probabilidad - UNAD",
+    page_title="Simulador y Laboratorio Probabilístico - UNAD",
     layout="wide",
     initial_sidebar_state="expanded",
     page_icon="🎓",
 )
 
-# Estilos CSS con la identidad corporativa de la UNAD (Naranja y Azul Institucional)
+# Estilos CSS idénticos a la interfaz institucional (Azul oscuro UNAD y detalles claros)
 st.markdown(
     """
 <style>
     :root {
-        --unad-orange: #F58220;
-        --unad-blue: #000066;
-        --unad-light-bg: #F8F9FA;
+        --unad-main-blue: #1B365D;
+        --unad-secondary-blue: #005A9C;
+        --unad-light-blue: #60C1E5;
+        --unad-bg: #F0F4F8;
     }
     .main {
         background-color: #FFFFFF;
     }
+    /* Barra superior simulada / Títulos */
     .stTitle {
-        color: #000066 !important;
+        color: #1B365D !important;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     .stSidebar {
-        background-color: #F8F9FA;
-        border-right: 3px solid #F58220;
+        background-color: #F0F4F8;
+        border-right: 3px solid #005A9C;
     }
     h1, h2, h3 {
-        color: #000066 !important;
+        color: #1B365D !important;
         font-weight: 700;
     }
+    /* Botones principales con el azul institucional */
     .stButton > button {
-        background-color: #F58220;
+        background-color: #005A9C;
         color: white;
         border-radius: 6px;
         border: none;
@@ -47,7 +50,7 @@ st.markdown(
         width: 100%;
     }
     .stButton > button:hover {
-        background-color: #d06b15;
+        background-color: #1B365D;
         color: white;
     }
 </style>
@@ -93,9 +96,9 @@ def graficar_distribucion_discreta(x: np.ndarray, y: np.ndarray, titulo: str):
   ax.bar(
       x,
       y,
-      color="#F58220",
+      color="#005A9C",
       alpha=0.85,
-      edgecolor="#000066",
+      edgecolor="#1B365D",
       linewidth=0.8,
       width=0.6,
   )
@@ -103,38 +106,38 @@ def graficar_distribucion_discreta(x: np.ndarray, y: np.ndarray, titulo: str):
       "Valores de la Variable (x)",
       fontsize=10,
       fontweight="bold",
-      color="#000066",
+      color="#1B365D",
   )
   ax.set_ylabel(
-      "Probabilidad P(X = x)", fontsize=10, fontweight="bold", color="#000066"
+      "Probabilidad P(X = x)", fontsize=10, fontweight="bold", color="#1B365D"
   )
   ax.grid(axis="y", linestyle="--", alpha=0.5)
   ax.spines["top"].set_visible(False)
   ax.spines["right"].set_visible(False)
-  ax.set_title(titulo, fontsize=12, color="#000066", fontweight="bold")
+  ax.set_title(titulo, fontsize=12, color="#1B365D", fontweight="bold")
   st.pyplot(fig)
 
 
 def graficar_distribucion_continua(x: np.ndarray, y: np.ndarray, titulo: str):
   fig, ax = plt.subplots(figsize=(10, 4))
-  ax.plot(x, y, color="#000066", linewidth=2.5, label="f(x)")
-  ax.fill_between(x, y, color="#F58220", alpha=0.25)
+  ax.plot(x, y, color="#1B365D", linewidth=2.5, label="f(x)")
+  ax.fill_between(x, y, color="#60C1E5", alpha=0.3)
   ax.set_xlabel(
-      "Valores (x)", fontsize=10, fontweight="bold", color="#000066"
+      "Valores (x)", fontsize=10, fontweight="bold", color="#1B365D"
   )
   ax.set_ylabel(
-      "Densidad f(x)", fontsize=10, fontweight="bold", color="#000066"
+      "Densidad f(x)", fontsize=10, fontweight="bold", color="#1B365D"
   )
   ax.grid(True, linestyle="--", alpha=0.5)
   ax.spines["top"].set_visible(False)
   ax.spines["right"].set_visible(False)
   ax.legend()
-  ax.set_title(titulo, fontsize=12, color="#000066", fontweight="bold")
+  ax.set_title(titulo, fontsize=12, color="#1B365D", fontweight="bold")
   st.pyplot(fig)
 
 
 # ==========================================
-# FORMULARIOS Y CÁLCULOS
+# FORMULARIOS Y PARÁMETROS
 # ==========================================
 def formulario_parametros_discretos():
   st.subheader("🔢 Parámetros de la Distribución")
@@ -177,7 +180,7 @@ def formulario_parametros_exponencial():
 
 
 # ==========================================
-# MÓDULO DE VALIDACIÓN MANUAL CORREGIDO
+# MÓDULO DE VALIDACIÓN MANUAL PASO A PASO
 # ==========================================
 def modulo_validacion(
     tipo: str,
@@ -195,36 +198,42 @@ def modulo_validacion(
   if distribucion == "Binomial" and val_x is not None:
     comb_val = math.comb(n, int(val_x))
     prob = comb_val * (p**val_x) * ((1 - p) ** (n - val_x))
-    with st.expander("Ver cálculo paso a paso", expanded=True):
+    with st.expander(
+        "📌 Ver desglose y cálculo paso a paso", expanded=True
+    ):
       st.info(
           f"**Binomial (n={n}, p={p}, x={int(val_x)}):**\n\n"
-          f"1. Combinatoria $\\binom{{{n}}}{{{int(val_x)}}}$: {comb_val}\n"
+          f"1. Coeficiente Combinatorio $\\binom{{{n}}}{{{int(val_x)}}}$:"
+          f" {comb_val}\n"
           f"2. Probabilidad de éxito ($p^{val_x}$): {p**val_x:.5f}\n"
           f"3. Probabilidad de fracaso ($(1-p)^{n-val_x}$):"
-          f" {((1-p)**(n-val_x)):.5f}\n\n👉 **P(X = {int(val_x)}) = {prob:.6f}**"
-          f" ({prob*100:.2f}%)"
+          f" {((1-p)**(n-val_x)):.5f}\n\n👉 **Resultado P(X = {int(val_x)}) ="
+          f" {prob:.6f}** ({prob*100:.2f}%)"
       )
 
   elif distribucion == "Poisson" and val_x is not None:
     prob = (np.exp(-mu) * (mu**val_x)) / math.factorial(int(val_x))
-    with st.expander("Ver cálculo paso a paso", expanded=True):
+    with st.expander(
+        "📌 Ver desglose y cálculo paso a paso", expanded=True
+    ):
       st.info(
           f"**Poisson (μ={mu}, x={int(val_x)}):**\n\n"
-          f"1. Factor exponencial ($e^{{-{mu}}}$): {np.exp(-mu):.5f}\n"
+          f"1. Constante exponencial ($e^{{-{mu}}}$): {np.exp(-mu):.5f}\n"
           f"2. Término de tasa ($\mu^{val_x}$): {mu**val_x:.5f}\n"
-          f"3. Factorial ($x!$): {math.factorial(int(val_x))}\n\n👉 **P(X ="
-          f" {int(val_x)}) = {prob:.6f}** ({prob*100:.2f}%)"
+          f"3. Factorial ($x!$): {math.factorial(int(val_x))}\n\n👉 **Resultado"
+          f" P(X = {int(val_x)}) = {prob:.6f}** ({prob*100:.2f}%)"
       )
 
   elif distribucion == "Normal" and val_x is not None:
-    # Corrección: Se incluyen mu y sigma correctamente en el cálculo
     dens = (1 / (sigma * np.sqrt(2 * np.pi))) * np.exp(
         -0.5 * ((val_x - mu) / sigma) ** 2
     )
-    with st.expander("Ver cálculo paso a paso", expanded=True):
+    with st.expander(
+        "📌 Ver desglose y cálculo paso a paso", expanded=True
+    ):
       st.info(
           f"**Distribución Normal (μ={mu}, σ={sigma}, x={val_x:.2f}):**\n\n"
-          f"1. Diferencia estandarizada (($x - \\mu$)/$\\sigma$):"
+          f"1. Valor estandarizado $z = (x - \\mu)/\\sigma$ ="
           f" {((val_x - mu)/sigma):.4f}\n"
           f"2. Exponencial de la campana: {np.exp(-0.5 * ((val_x - mu) / sigma) ** 2):.5f}\n\n"
           f"👉 **Valor de Densidad f(x) = {dens:.6f}**"
@@ -232,11 +241,13 @@ def modulo_validacion(
 
   elif distribucion == "Exponencial" and val_x is not None:
     prob = lam * np.exp(-lam * val_x)
-    with st.expander("Ver cálculo paso a paso", expanded=True):
+    with st.expander(
+        "📌 Ver desglose y cálculo paso a paso", expanded=True
+    ):
       st.info(
           f"**Distribución Exponencial (λ={lam}, x={val_x:.2f}):**\n\n"
-          f"1. Exponente ($-\\lambda x$): {-lam * val_x:.4f}\n\n👉 **Valor de"
-          f" Densidad f(x) = {prob:.6f}**"
+          f"1. Argumento exponencial ($-\\lambda x$): {-lam * val_x:.4f}\n\n👉"
+          f" **Valor de Densidad f(x) = {prob:.6f}**"
       )
 
 
@@ -245,9 +256,9 @@ def modulo_validacion(
 # ==========================================
 st.title("📊 Simulador y Validador de Variables Aleatorias")
 st.markdown(
-    "**Universidad Nacional Abierta y a Distancia (UNAD)** — Herramienta"
-    " interactiva para la exploración pedagógica y validación manual de"
-    " ejercicios estadísticos."
+    "**Universidad Nacional Abierta y a Distancia (UNAD)** — Laboratorio"
+    " interactivo para la exploración pedagógica y validación manual de"
+    " problemas de probabilidad."
 )
 st.markdown("---")
 
@@ -343,7 +354,6 @@ else:
     val_x = st.number_input(
         "Ingrese un valor de x para evaluar densidad:", value=mu, step=0.1
     )
-    # Se pasan correctamente mu y sigma para solucionar el error
     modulo_validacion("continua", "Normal", mu=mu, sigma=sigma, val_x=val_x)
   else:
     lam = formulario_parametros_exponencial()
