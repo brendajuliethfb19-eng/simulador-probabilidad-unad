@@ -4,7 +4,7 @@ import numpy as np
 import streamlit as st
 
 # ==========================================
-# CONFIGURACIÓN DE PÁGINA Y ESTILO INSTITUCIONAL UNAD
+# CONFIGURACIÓN DE PÁGINA Y ESTILO UNAD CLARO
 # ==========================================
 st.set_page_config(
     page_title="Simulador y Laboratorio Probabilístico - UNAD",
@@ -13,33 +13,44 @@ st.set_page_config(
     page_icon="🎓",
 )
 
-# Estilos CSS idénticos a la interfaz institucional (Azul oscuro UNAD y detalles claros)
+# Estilos CSS con fondo blanco limpio, letras oscuras legibles y acentos UNAD
 st.markdown(
     """
 <style>
-    :root {
-        --unad-main-blue: #1B365D;
-        --unad-secondary-blue: #005A9C;
-        --unad-light-blue: #60C1E5;
-        --unad-bg: #F0F4F8;
+    /* Forzar fondo claro general */
+    .stApp {
+        background-color: #F8F9FA;
+        color: #212529;
     }
-    .main {
+    /* Estilos de la barra lateral */
+    section[data-testid="stSidebar"] {
         background-color: #FFFFFF;
+        border-right: 3px solid #005A9C;
     }
-    /* Barra superior simulada / Títulos */
-    .stTitle {
+    /* Títulos y textos generales con alta visibilidad */
+    h1, h2, h3, h4, h5, h6, span, p, label {
         color: #1B365D !important;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    .stSidebar {
-        background-color: #F0F4F8;
-        border-right: 3px solid #005A9C;
-    }
-    h1, h2, h3 {
+    .stTitle {
         color: #1B365D !important;
-        font-weight: 700;
     }
-    /* Botones principales con el azul institucional */
+    /* Tarjetas de métricas profesionales */
+    div[data-testid="stMetric"] {
+        background-color: #FFFFFF;
+        border: 1px solid #DEE2E6;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    div[data-testid="stMetric"] label {
+        color: #6C757D !important;
+    }
+    div[data-testid="stMetric"] div[data-testid="stMetricValue"] {
+        color: #005A9C !important;
+        font-weight: bold;
+    }
+    /* Botones institucionales */
     .stButton > button {
         background-color: #005A9C;
         color: white;
@@ -89,7 +100,7 @@ def _pdf_exponencial(x: np.ndarray, lam: float) -> np.ndarray:
 
 
 # ==========================================
-# FUNCIONES DE GRÁFICA (Estilo UNAD)
+# FUNCIONES DE GRÁFICA
 # ==========================================
 def graficar_distribucion_discreta(x: np.ndarray, y: np.ndarray, titulo: str):
   fig, ax = plt.subplots(figsize=(10, 4))
@@ -137,7 +148,7 @@ def graficar_distribucion_continua(x: np.ndarray, y: np.ndarray, titulo: str):
 
 
 # ==========================================
-# FORMULARIOS Y PARÁMETROS
+# FORMULARIOS
 # ==========================================
 def formulario_parametros_discretos():
   st.subheader("🔢 Parámetros de la Distribución")
@@ -180,7 +191,7 @@ def formulario_parametros_exponencial():
 
 
 # ==========================================
-# MÓDULO DE VALIDACIÓN MANUAL PASO A PASO
+# MÓDULO DE VALIDACIÓN MANUAL
 # ==========================================
 def modulo_validacion(
     tipo: str,
@@ -348,7 +359,7 @@ else:
     with col2:
       st.metric("Varianza V[X]", f"{sigma**2:.4f}")
     with col3:
-      st.metric("Desviación Estándar (σ)", f"{sigma:.4f}")
+      st.metric("Desviación Estándar (σ)", f"{sigma**2:.4f}")
 
     graficar_distribucion_continua(x, y, f"Distribución Normal μ={mu}, σ={sigma}")
     val_x = st.number_input(
