@@ -218,4 +218,152 @@ def modulo_validacion(
 
   elif distribucion == "Normal" and val_x is not None:
     # Corrección: Se incluyen mu y sigma correctamente en el cálculo
-    dens = (
+    dens = (1 / (sigma * np.sqrt(2 * np.pi))) * np.exp(
+        -0.5 * ((val_x - mu) / sigma) ** 2
+    )
+    with st.expander("Ver cálculo paso a paso", expanded=True):
+      st.info(
+          f"**Distribución Normal (μ={mu}, σ={sigma}, x={val_x:.2f}):**\n\n"
+          f"1. Diferencia estandarizada (($x - \\mu$)/$\\sigma$):"
+          f" {((val_x - mu)/sigma):.4f}\n"
+          f"2. Exponencial de la campana: {np.exp(-0.5 * ((val_x - mu) / sigma) ** 2):.5f}\n\n"
+          f"👉 **Valor de Densidad f(x) = {dens:.6f}**"
+      )
+
+  elif distribucion == "Exponencial" and val_x is not None:
+    prob = lam * np.exp(-lam * val_x)
+    with st.expander("Ver cálculo paso a paso", expanded=True):
+      st.info(
+          f"**Distribución Exponencial (λ={lam}, x={val_x:.2f}):**\n\n"
+          f"1. Exponente ($-\\lambda x$): {-lam * val_x:.4f}\n\n👉 **Valor de"
+          f" Densidad f(x) = {prob:.6f}**"
+      )
+
+
+# ==========================================
+# INTERFAZ PRINCIPAL
+# ==========================================
+st.title("📊 Simulador y Validador de Variables Aleatorias")
+st.markdown(
+    "**Universidad Nacional Abierta y a Distancia (UNAD)** — Herramienta"
+    " interactiva para la exploración pedagógica y validación manual de"
+    " ejercicios estadísticos."
+)
+st.markdown("---")
+
+tipo_variable = st.sidebar.selectbox(
+    "Tipo de Variable Aleatoria",
+    ["Discreta", "Continua"],
+    help="Seleccione el tipo de variable para configurar el simulador.",
+)
+
+if tipo_variable == "Discreta":
+  st.sidebar.header("⚙️ Configuración")
+  distribucion = st.sidebar.radio(
+      "Modelo de Distribución",
+      ["Binomial", "Poisson"],
+      help="Seleccione el modelo de distribución discreta.",
+  )
+  if distribucion == "Binomial":
+    n, p = formulario_parametros_discretos()
+    stats = {
+        "media": n * p,
+        "varianza": n * p * (1 - p),
+        "desv": np.sqrt(n * p * (1 - p)),
+    }
+    x = np.arange(0, n + 1)
+    y = _pmf_binomial(x, n, p)
+    st.subheader(f"📌 Distribución Binomial: X ~ Bin(n={n}, p={p})")
+
+    col1, col2, col3 = st.columns(3)
+    with col1:
+      st.metric("Esperanza E[X]", f"{stats['media']:.4f}")
+    with col2:
+      st.metric("Varianza V[X]", f"{stats['varianza']:.4f}")
+    with col3:
+      st.metric("Desviación Estándar (σ)", f"{stats['desv']:.4f}")
+
+    graficar_distribucion_discreta(x, y, f"Distribución Binomial n={n}, p={p}")
+    val_x = st.number_input(
+        "Ingrese un valor de x para validar a mano:",
+        min_value=0,
+        max_value=int(n),
+        value=0,
+        step=1,
+    )
+    modulo_validacion("discreta", "Binomial", n=n, p=p, val_x=val_x)
+  else:
+    mu = formulario_parametros_poisson()
+    stats = {"media": mu, "varianza": mu, "desv": np.sqrt(mu)}
+    x_max = int(mu * 3) + 15
+    x = np.arange(0, x_max)
+    y = _pmf_poisson(x, mu)
+    st.subheader(f"📌 Distribución de Poisson: X ~ Pois(μ={mu})")
+
+    col1, col2, col3 = st.columns(3)
+    with col1:
+      st.metric("Esperanza E[X]", f"{stats['media']:.4f}")
+    with col2:
+      st.metric("Varianza V[X]", f"{stats['varianza']:.4f}")
+    with col3:
+      st.metric("Desviación Estándar (σ)", f"{stats['desv']:.4f}")
+
+    graficar_distribucion_discreta(x, y, f"Distribución de Poisson μ={mu}")
+    val_x = st.number_input(
+        "Ingrese un valor de x para validar a mano:",
+        min_value=0,
+        max_value=int(mu * 3),
+        value=int(mu),
+        step=1,
+    )
+    modulo_validacion("discreta", "Poisson", mu=mu, val_x=val_x)
+
+else:
+  st.sidebar.header("⚙️ Configuración")
+  distribucion = st.sidebar.radio(
+      "Modelo de Distribución",
+      ["Normal (Gaussiana)", "Exponencial"],
+      help="Seleccione el modelo de distribución continua.",
+  )
+  if distribucion == "Normal (Gaussiana)":
+    mu, sigma = formulario_parametros_normales()
+    x = np.linspace(mu - 4 * sigma, mu + 4 * sigma, 300)
+    y = _pdf_normal(x, mu, sigma)
+    st.subheader(f"📌 Distribución Normal: X ~ N(μ={mu}, σ²={sigma**2})")
+
+    col1, col2, col3 = st.columns(3)
+    with col1:
+      st.metric("Esperanza E[X]", f"{mu:.4f}")
+    with col2:
+      st.metric("Varianza V[X]", f"{sigma**2:.4f}")
+    with col3:
+      st.metric("Desviación Estándar (σ)", f"{sigma:.4f}")
+
+    graficar_distribucion_continua(x, y, f"Distribución Normal μ={mu}, σ={sigma}")
+    val_x = st.number_input(
+        "Ingrese un valor de x para evaluar densidad:", value=mu, step=0.1
+    )
+    # Se pasan correctamente mu y sigma para solucionar el error
+    modulo_validacion("continua", "Normal", mu=mu, sigma=sigma, val_x=val_x)
+  else:
+    lam = formulario_parametros_exponencial()
+    x = np.linspace(0, 5 / lam, 300)
+    y = _pdf_exponencial(x, lam)
+    stats = {"media": 1 / lam, "varianza": 1 / (lam**2), "desv": 1 / lam}
+    st.subheader(f"📌 Distribución Exponencial: X ~ Exp(λ={lam})")
+
+    col1, col2, col3 = st.columns(3)
+    with col1:
+      st.metric("Esperanza E[X]", f"{stats['media']:.4f}")
+    with col2:
+      st.metric("Varianza V[X]", f"{stats['varianza']:.4f}")
+    with col3:
+      st.metric("Desviación Estándar (σ)", f"{stats['desv']:.4f}")
+
+    graficar_distribucion_continua(x, y, f"Distribución Exponencial λ={lam}")
+    val_x = st.number_input(
+        "Ingrese un valor de x para evaluar densidad:",
+        value=float(1 / lam),
+        step=0.1,
+    )
+    modulo_validacion("continua", "Exponencial", lam=lam, val_x=val_x)
